@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunebox - Your Music</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-music"></i> <span>Tunebox</span>
+            </div>
+
+            <div>
+                <div class="section-title">Menu</div>
+                <ul class="nav-links">
+                    <li class="nav-item active" onclick="filterSongs('all')">
+                        <i class="fa-solid fa-house"></i> Home
+                    </li>
+                    <li class="nav-item" onclick="showDiscover()">
+                        <i class="fa-solid fa-compass"></i> Discover
+                    </li>
+                    <li class="nav-item">
+                        <i class="fa-solid fa-radio"></i> Radio
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="section-title">Library</div>
+                <ul class="library-links nav-links">
+                    <li class="nav-item" onclick="showFavorites()">
+                        <i class="fa-regular fa-heart"></i> Favorites
+                    </li>
+                    <li class="nav-item" onclick="showPlaylists()">
+                        <i class="fa-solid fa-list-ul"></i> Playlists
+                    </li>
+                    <li class="nav-item" onclick="showRecents()">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Recent
+                    </li>
+                    <li class="nav-item" id="navProfile" style="display: none;" onclick="showProfile()">
+                        <i class="fa-solid fa-user"></i> Profile
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header & Filters -->
+            <header class="header">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search songs, artists..." onkeyup="searchSongs(this.value)">
+                </div>
+
+                <div class="user-controls">
+                    <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">Login</button>
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=100&q=80"
+                        alt="User" class="user-avatar-small" id="userAvatarSmall" onclick="showProfile()">
+                </div>
+            </header>
+
+            <div id="homeSection">
+                <div class="filters">
+                    <select class="filter-select" id="languageFilter" onchange="applyFilters()">
+                        <option value="all">All Languages</option>
+                        <option value="english">English</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="telugu">Telugu</option>
+                        <option value="korean">Korean</option>
+                    </select>
+
+                    <select class="filter-select" id="singerFilter" onchange="applyFilters()">
+                        <option value="all">All Singers</option>
+                        <option value="arijit">Arijit Singh</option>
+                        <option value="taylor">Taylor Swift</option>
+                        <option value="shreya">Shreya Ghoshal</option>
+                        <option value="bts">BTS</option>
+                    </select>
+                </div>
+            </div> <!-- End of Home Section -->
+
+            <!-- Profile Section -->
+            <div id="profileSection" class="profile-section">
+                <div class="profile-header">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80"
+                        alt="User" class="profile-avatar">
+                    <div class="profile-info">
+                        <div
+                            style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+                            Profile</div>
+                        <h1 id="profileName">Guest User</h1>
+                        <div class="profile-stats">
+                            <span class="stat-item"><b id="playlistCount">0</b> Public Playlists</span>
+                            <span class="stat-item"><b>12</b> Followers</span>
+                            <span class="stat-item"><b>34</b> Following</span>
+                        </div>
+                        <button class="submit-btn"
+                            style="margin-top: 20px; background: transparent; border: 1px solid var(--glass-border);"
+                            onclick="logout()">Logout</button>
+                    </div>
+                </div>
+                <div class="section-header">
+                    <h2>Your Liked Songs</h2>
+                </div>
+                <div class="grid-container" id="profileLikedGrid">
+                    <!-- Liked songs will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Discover Section -->
+            <div id="discoverSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Discover Genres</h2>
+                </div>
+                <!-- Genre List -->
+                <div class="grid-container" id="genreList">
+                    <div class="card genre-card"
+                        style="background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);"
+                        onclick="openGenre('pop')">
+                        <h3>Pop</h3>
+                    </div>
+                    <div class="card genre-card" style="background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);"
+                        onclick="openGenre('jazz')">
+                        <h3>Jazz</h3>
+                    </div>
+                    <div class="card genre-card" style="background: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);"
+                        onclick="openGenre('indie')">
+                        <h3>Indie</h3>
+                    </div>
+                    <div class="card genre-card" style="background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
+                        onclick="openGenre('rock')">
+                        <h3>Rock</h3>
+                    </div>
+                </div>
+
+                <!-- Genre Result (Hidden by default) -->
+                <div id="genreResultSection" style="display: none;">
+                    <button onclick="backToGenres()" class="auth-btn" style="margin-bottom: 20px;"><i
+                            class="fa-solid fa-arrow-left"></i> Back</button>
+                    <div class="section-header">
+                        <h2 id="genreTitle">Songs</h2>
+                    </div>
+                    <div class="grid-container" id="genreGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recents Section -->
+            <div id="recentsSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Recently Played</h2>
+                </div>
+                <div class="grid-container" id="recentsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Playlists Section -->
+            <div id="playlistsSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Curated Playlists</h2>
+                </div>
+                <div class="grid-container">
+                    <div class="card playlist-card">
+                        <div class="card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=300&q=80"
+                                class="card-img">
+                            <div class="play-overlay"><button class="play-btn-card"><i
+                                        class="fa-solid fa-play"></i></button></div>
+                        </div>
+                        <div class="card-title">Romantic Hits</div>
+                        <div class="card-subtitle">Love is in the air</div>
+                    </div>
+                    <div class="card playlist-card">
+                        <div class="card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80"
+                                class="card-img">
+                            <div class="play-overlay"><button class="play-btn-card"><i
+                                        class="fa-solid fa-play"></i></button></div>
+                        </div>
+                        <div class="card-title">Vintage Vibes</div>
+                        <div class="card-subtitle">Golden Oldies</div>
+                    </div>
+                    <div class="card playlist-card">
+                        <div class="card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?auto=format&fit=crop&w=300&q=80"
+                                class="card-img">
+                            <div class="play-overlay"><button class="play-btn-card"><i
+                                        class="fa-solid fa-play"></i></button></div>
+                        </div>
+                        <div class="card-title">1990s Classics</div>
+                        <div class="card-subtitle">Back to the 90s</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Songs Section -->
+            <section id="trendingSection">
+                <div class="section-header">
+                    <h2>Trending Now</h2>
+                    <span class="see-all">See All</span>
+                </div>
+
+                <div class="grid-container" id="songsGrid">
+                    <!-- Javascript will populate this -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Player Bar -->
+        <div class="player-bar">
+            <div class="player-info">
+                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=100&q=80"
+                    alt="" class="player-thumb" id="currentThumb">
+                <div class="track-details">
+                    <h4 id="currentTitle">Select a song</h4>
+                    <p id="currentArtist">--</p>
+                </div>
+                <button class="like-btn" id="playerLikeBtn"><i class="fa-regular fa-heart"></i></button>
+            </div>
+
+            <div class="player-controls-container">
+                <div class="player-controls">
+                    <button class="control-btn"><i class="fa-solid fa-shuffle"></i></button>
+                    <button class="control-btn"><i class="fa-solid fa-backward-step"></i></button>
+                    <button class="control-btn play-main" id="playPauseBtn" onclick="togglePlay()">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn"><i class="fa-solid fa-forward-step"></i></button>
+                    <button class="control-btn"><i class="fa-solid fa-repeat"></i></button>
+                </div>
+                <div class="progress-container">
+                    <span>0:00</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-fill" style="width: 0%"></div>
+                        <div class="progress-handle"></div>
+                    </div>
+                    <span>0:00</span>
+                </div>
+            </div>
+
+            <div class="volume-controls">
+                <i class="fa-solid fa-volume-high"></i>
+                <div class="volume-slider">
+                    <div class="volume-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Login to Tunebox</h2>
+                <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <input type="text" id="usernameInput" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password">
+                </div>
+                <button class="submit-btn" onclick="performLogin()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audioPlayer" onended="togglePlay()"></audio>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
